@@ -20,7 +20,7 @@ export interface ClientTableJsonObject {
 
 export async function getClientTable() {
     const response = await axios.get(
-      'http://localhost:8040/clients',
+      'http://localhost:8000/clients/',
       {}
     );
 

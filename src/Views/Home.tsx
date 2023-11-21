@@ -6,7 +6,7 @@ import { INIT_RESULT_DATA } from "../DataConstants/ClientTableConstants";
 
 
 
-export default function Main() {
+export default function Home() {
     
   const [tableData, setTableData] = useState<ClientTableRow[]>([INIT_RESULT_DATA]);
   const [modalClientData, setmodalClientData] = useState<ClientTableRow>(INIT_RESULT_DATA);
