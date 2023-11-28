@@ -1,5 +1,5 @@
 import "./App.css";
-import About from "./Views/About";
+import Clients from "./Views/Clients";
 import Home from "./Views/Home";
 import Logs from "./Views/Logs";
 
@@ -16,7 +16,7 @@ function App() {
       <Routes>
           <Route path="/">
             <Route index element={<Home/>}></Route>
-            <Route path="about" element={<About/>}></Route>
+            <Route path="clients" element={<Clients/>}></Route>
             <Route path="logs" element={<Logs/>}></Route>
           </Route>
         </Routes>

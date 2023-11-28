@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../App.css";
-import { INIT_RESULT_DATA } from "../DataConstants/LogsTableConstants";
+import { INIT_LOGS_DATA } from "../DataConstants/LogsTableConstants";
 import { LogsTableJsonObject, LogsTableRow, getLogsTable } from "../DataObjects/LogsTableInterface";
 
 
@@ -8,8 +8,8 @@ import { LogsTableJsonObject, LogsTableRow, getLogsTable } from "../DataObjects/
 
 export default function Logs() {
     
-  const [tableData, setTableData] = useState<LogsTableRow[]>([INIT_RESULT_DATA]);
-  const [modalClientData, setmodalClientData] = useState<LogsTableRow>(INIT_RESULT_DATA);
+  const [tableData, setTableData] = useState<LogsTableRow[]>([INIT_LOGS_DATA]);
+  const [modalClientData, setmodalClientData] = useState<LogsTableRow>(INIT_LOGS_DATA);
   const [isModalActive, setIsModalActive] = useState<Boolean>(false);
 console.log(3)
 

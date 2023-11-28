@@ -1,18 +1,20 @@
 import axios from "axios";
 
 export interface ClientTableRow {
-    id: Number,
+    abc_client_id: Number,
     ClientName: String,
     AddressState: String,
+    company_address: Number,
     InventoryCount: Number,
     ContactCount: Number
 }
 
 
 export interface ClientTableJsonObject {
-    id: Number,
+    abc_client_id: Number,
     client_name: String,
     state: String,
+    company_address: Number,
     num_of_inventories: Number,
     num_of_contacts: Number
 }

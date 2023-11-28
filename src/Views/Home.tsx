@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import "../App.css";
 import {ClientTableRow, ClientTableJsonObject, getClientTable} from "../DataObjects/ClientTableInterface";
-import { INIT_RESULT_DATA } from "../DataConstants/ClientTableConstants";
+import { INIT_CLIENT_DATA } from "../DataConstants/ClientTableConstants";
 
 
 
 
 export default function Home() {
     
-  const [tableData, setTableData] = useState<ClientTableRow[]>([INIT_RESULT_DATA]);
-  const [modalClientData, setmodalClientData] = useState<ClientTableRow>(INIT_RESULT_DATA);
+  const [tableData, setTableData] = useState<ClientTableRow[]>([INIT_CLIENT_DATA]);
+  const [modalClientData, setmodalClientData] = useState<ClientTableRow>(INIT_CLIENT_DATA);
   const [isModalActive, setIsModalActive] = useState<Boolean>(false);
 
 
@@ -23,8 +23,9 @@ export default function Home() {
           //Define the output of my objects to the array.
           response.data.forEach((element: ClientTableJsonObject) => {
             clientTableArray.push({
-              id: (element.id ? element.id : null),
+              abc_client_id: (element.abc_client_id ? element.abc_client_id : null),
               ClientName: (element.client_name ? element.client_name : ""),
+              company_address: (element.company_address ? element.company_address : null),
               AddressState: (element.state ? element.state : ""),
               InventoryCount: (element.num_of_inventories ? element.num_of_inventories : null),
               ContactCount: (element.num_of_contacts ? element.num_of_contacts : null)
@@ -69,7 +70,7 @@ export default function Home() {
           <section className="modal-card-body columns">
             <div className="column">
               <label className="has-text-weight-medium">Number: </label>
-              <p className="mb-3">{(modalClientData.id ? modalClientData.id.toString() : "")}</p>
+              <p className="mb-3">{(modalClientData.abc_client_id ? modalClientData.abc_client_id.toString() : "")}</p>
               { modalClientData.ClientName &&
                 <>
                   <label className="has-text-weight-medium">Client Name: </label>
@@ -127,8 +128,8 @@ export default function Home() {
                 </thead>
                 <tbody>
                   {tableData.map((row, i) =>
-                    <tr id={(row.id ? row.id.toString() : "")}>
-                      <td>{(row.id ? row.id.toString() : "")}</td>
+                    <tr id={(row.abc_client_id ? row.abc_client_id.toString() : "")}>
+                      <td>{(row.abc_client_id ? row.abc_client_id.toString() : "")}</td>
                       <td>{(row.ClientName ? row.ClientName : "")}</td>
                       <td>{(row.AddressState ? row.AddressState : "")}</td>
                       <td>{(row.InventoryCount ? row.InventoryCount.toString() : "")}</td>
