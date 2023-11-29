@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import "../App.css";
-import {ClientTableRow, ClientTableJsonObject, getClientTable} from "../DataObjects/ClientTableInterface";
+import { ClientTableRow, ClientTableJsonObject, getClientTable } from "../DataObjects/ClientTableInterface";
 import { INIT_CLIENT_DATA } from "../DataConstants/ClientTableConstants";
 
 
 
 
 export default function Home() {
-    
+
   const [tableData, setTableData] = useState<ClientTableRow[]>([INIT_CLIENT_DATA]);
   const [modalClientData, setmodalClientData] = useState<ClientTableRow>(INIT_CLIENT_DATA);
   const [isModalActive, setIsModalActive] = useState<Boolean>(false);
 
 
   //A function that supports the creation of the client table.
-  function setClientTable(){
-    try{
+  function setClientTable() {
+    try {
       getClientTable().then(
-        function (response: any){
+        function (response: any) {
           let clientTableArray: ClientTableRow[] = [];
-          
+
           //Define the output of my objects to the array.
           response.data.forEach((element: ClientTableJsonObject) => {
             clientTableArray.push({
@@ -40,14 +40,14 @@ export default function Home() {
           console.log(error)
         }
       );
-    } catch{}
-  } 
-  
+    } catch { }
+  }
+
   function toggleModal() {
     setIsModalActive(!isModalActive);
   }
 
-  function showModal(key: number){
+  function showModal(key: number) {
     let clientRow: ClientTableRow = tableData.at(key);
     setmodalClientData(clientRow);
     toggleModal();
@@ -55,13 +55,13 @@ export default function Home() {
 
 
   const Modal = ({ closeModal, modalState }: { closeModal: any, modalState: boolean }) => {
-    if(!modalState) {
+    if (!modalState) {
       return null;
     }
-    
-    return(
+
+    return (
       <div className="modal is-active">
-        <div className="modal-background"></div>
+        <div className="modal-background" onClick={closeModal}></div>
         <div className="modal-card">
           <div className="modal-card-head is-radiusless">
             <p className="modal-card-title">Client Information</p>
@@ -71,7 +71,7 @@ export default function Home() {
             <div className="column">
               <label className="has-text-weight-medium">Number: </label>
               <p className="mb-3">{(modalClientData.abc_client_id ? modalClientData.abc_client_id.toString() : "")}</p>
-              { modalClientData.ClientName &&
+              {modalClientData.ClientName &&
                 <>
                   <label className="has-text-weight-medium">Client Name: </label>
                   <p>{(modalClientData.ClientName ? modalClientData.ClientName : "")}</p>
@@ -79,19 +79,19 @@ export default function Home() {
               }
             </div>
             <div className="column">
-              { modalClientData.AddressState &&
+              {modalClientData.AddressState &&
                 <>
                   <label className="has-text-weight-medium">State: </label>
                   <p className="mb-3">{(modalClientData.AddressState ? modalClientData.AddressState : "")}</p>
                 </>
               }
-              { modalClientData.InventoryCount &&
+              {modalClientData.InventoryCount &&
                 <>
                   <label className="has-text-weight-medium">Number of Inventories: </label>
                   <p className="mb-3">{(modalClientData.InventoryCount ? modalClientData.InventoryCount.toString() : "")}</p>
                 </>
               }
-              { modalClientData.ContactCount &&
+              {modalClientData.ContactCount &&
                 <>
                   <label className="has-text-weight-medium">Number of Contacts: </label>
                   <p>{(modalClientData.ContactCount ? modalClientData.ContactCount.toString() : "")}</p>
@@ -109,40 +109,41 @@ export default function Home() {
   useEffect(() => {
     setClientTable();
   }, []);
-  
+
   return (
     <>
-      <h2 className="is-size-2 pb-6 has-text-weight-medium">Client List</h2>
-      <div className="box columns is-centered is-radiusless">
-        <div className="column is-12 px-0 py-0"> 
+      <div className="container">
+        <h2 className="is-size-2 pb-6 has-text-weight-medium">Client List</h2>
+        <div className="box columns is-centered">
+          <div className="column is-12 px-0 py-0">
             <table className="table is-striped is-fullwidth">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Client Name</th>
-                    <th>State</th>
-                    <th>Number of Inventories</th>
-                    <th>Number of Contacts</th>
-                    <th></th>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Client Name</th>
+                  <th>State</th>
+                  <th>Number of Inventories</th>
+                  <th>Number of Contacts</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableData.map((row, i) =>
+                  <tr onClick={() => showModal(i)} className="row-click" key={(row.abc_client_id ? row.abc_client_id.toString() : "")}>
+                    <td>{(row.abc_client_id ? row.abc_client_id.toString() : "")}</td>
+                    <td>{(row.ClientName ? row.ClientName : "")}</td>
+                    <td>{(row.AddressState ? row.AddressState : "")}</td>
+                    <td>{(row.InventoryCount ? row.InventoryCount.toString() : "")}</td>
+                    <td>{(row.ContactCount ? row.ContactCount.toString() : "")}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {tableData.map((row, i) =>
-                    <tr id={(row.abc_client_id ? row.abc_client_id.toString() : "")}>
-                      <td>{(row.abc_client_id ? row.abc_client_id.toString() : "")}</td>
-                      <td>{(row.ClientName ? row.ClientName : "")}</td>
-                      <td>{(row.AddressState ? row.AddressState : "")}</td>
-                      <td>{(row.InventoryCount ? row.InventoryCount.toString() : "")}</td>
-                      <td>{(row.ContactCount ? row.ContactCount.toString() : "")}</td>
-                      <td><button className="button is-dark" onClick={() => showModal(i)}>View Client Details</button></td>
-                    </tr> 
-                  )}
-                </tbody>
+                )}
+              </tbody>
             </table>
             <Modal
               closeModal={toggleModal}
               modalState={isModalActive.valueOf()}
             />
+          </div>
         </div>
       </div>
     </>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../App.css";
-import {ClientTableRow, ClientTableJsonObject, getClientTable} from "../DataObjects/ClientTableInterface";
+import { ClientTableRow, ClientTableJsonObject, getClientTable } from "../DataObjects/ClientTableInterface";
 import { InventoryTableJsonObject, InventoryTableRow, getInventoryTable } from "../DataObjects/InventoryTableInterface";
 import { AddressTableJsonObject, AddressTableRow, getAddressTable } from "../DataObjects/AddressTableInterface";
 import { INIT_CLIENT_DATA } from "../DataConstants/ClientTableConstants";
@@ -10,8 +10,8 @@ import { INIT_INVENTORY_DATA } from "../DataConstants/InventoryTableConstants";
 
 
 export default function Clients() {
-    
-  const [data, setData] = useState<{}>([]);
+
+  const [data, setData] = useState([]);
   const [clientData, setClientData] = useState<ClientTableRow[]>([INIT_CLIENT_DATA]);
   const [addressData, setAddressData] = useState<AddressTableRow[]>([INIT_ADDRESS_DATA]);
   const [inventoryData, setInventoryData] = useState<InventoryTableRow[]>([INIT_INVENTORY_DATA]);
@@ -20,12 +20,12 @@ export default function Clients() {
 
 
   //A function that supports the creation of the client table.
-  function setClientTable(){
-    try{
+  function setClientTable() {
+    try {
       getClientTable().then(
-        function (response: any){
+        function (response: any) {
           let clientTableArray: ClientTableRow[] = [];
-          
+
           //Define the output of my objects to the array.
           response.data.forEach((element: ClientTableJsonObject) => {
             clientTableArray.push({
@@ -46,13 +46,13 @@ export default function Clients() {
           console.log(error)
         }
       );
-    } catch{}
+    } catch { }
 
-    try{
+    try {
       getAddressTable().then(
-        function (response: any){
+        function (response: any) {
           let addressTableArray: AddressTableRow[] = [];
-          
+
           //Define the output of my objects to the array.
           response.data.forEach((element: AddressTableJsonObject) => {
             addressTableArray.push({
@@ -74,13 +74,13 @@ export default function Clients() {
           console.log(error)
         }
       );
-    } catch{}
+    } catch { }
 
-    try{
+    try {
       getInventoryTable().then(
-        function (response: any){
+        function (response: any) {
           let inventoryTableArray: InventoryTableRow[] = [];
-          
+
           //Define the output of my objects to the array.
           response.data.forEach((element: InventoryTableJsonObject) => {
             inventoryTableArray.push({
@@ -101,14 +101,14 @@ export default function Clients() {
           console.log(error)
         }
       );
-    } catch{}
-  } 
-  
+    } catch { }
+  }
+
   function toggleModal() {
     setIsModalActive(!isModalActive);
   }
 
-  function showModal(key: number){
+  function showModal(key: number) {
     let clientRow: ClientTableRow = clientData.at(key);
     setmodalClientData(clientRow);
     toggleModal();
@@ -116,11 +116,11 @@ export default function Clients() {
 
 
   const Modal = ({ closeModal, modalState }: { closeModal: any, modalState: boolean }) => {
-    if(!modalState) {
+    if (!modalState) {
       return null;
     }
-    
-    return(
+
+    return (
       <div className="modal is-active">
         <div className="modal-background"></div>
         <div className="modal-card">
@@ -132,7 +132,7 @@ export default function Clients() {
             <div className="column">
               <label className="has-text-weight-medium">Number: </label>
               <p className="mb-3">{(modalClientData.abc_client_id ? modalClientData.abc_client_id.toString() : "")}</p>
-              { modalClientData.ClientName &&
+              {modalClientData.ClientName &&
                 <>
                   <label className="has-text-weight-medium">Client Name: </label>
                   <p>{(modalClientData.ClientName ? modalClientData.ClientName : "")}</p>
@@ -140,19 +140,19 @@ export default function Clients() {
               }
             </div>
             <div className="column">
-              { modalClientData.AddressState &&
+              {modalClientData.AddressState &&
                 <>
                   <label className="has-text-weight-medium">State: </label>
                   <p className="mb-3">{(modalClientData.AddressState ? modalClientData.AddressState : "")}</p>
                 </>
               }
-              { modalClientData.InventoryCount &&
+              {modalClientData.InventoryCount &&
                 <>
                   <label className="has-text-weight-medium">Number of Inventories: </label>
                   <p className="mb-3">{(modalClientData.InventoryCount ? modalClientData.InventoryCount.toString() : "")}</p>
                 </>
               }
-              { modalClientData.ContactCount &&
+              {modalClientData.ContactCount &&
                 <>
                   <label className="has-text-weight-medium">Number of Contacts: </label>
                   <p>{(modalClientData.ContactCount ? modalClientData.ContactCount.toString() : "")}</p>
@@ -170,77 +170,61 @@ export default function Clients() {
   useEffect(() => {
     setClientTable();
   }, []);
-  
+
   useEffect(() => {
-    const info: {id: Number, name: String, state: String, numOfInventories: Number} = {
-      id: -1,
-      name: '',
-      state: '',
-      numOfInventories: 0
+    function countInventories(clientId: Number) {
+      return inventoryData.filter(inventory => inventory.abc_client === clientId).length;
     }
-    const dataInfo: Array<{}> = []
 
-    clientData.forEach(client => {
+    const result = clientData.map(client => {
+      const { ClientName, abc_client_id } = client;
+      const address = addressData.find(address => address.address_id === client.company_address);
+      const state = address ? address.state : 'Unknown';
+      const numberOfInventories = countInventories(abc_client_id);
 
-      info.id = client.abc_client_id
-      info.name = client.ClientName
+      return {
+        abc_client_id,
+        ClientName,
+        state,
+        numberOfInventories,
+      };
+    });
 
-      addressData.forEach((address, index) => {
-        if (address.address_id === client.company_address) {
-          info.state = address.state
-        }
-      })
-      
-      let numOfIn = 0
-      inventoryData.forEach((inventory, index) => {
-        if (inventory.abc_client === client.abc_client_id) {
-          numOfIn += 1
-        }
-      })
-
-      console.log(info)
-
-      info.numOfInventories = numOfIn
-
-      dataInfo.push(info)
-
-    })
-    setData(dataInfo)
+    setData(result)
   }, [clientData, addressData, inventoryData]);
-  
+
   return (
     <>
-      <h2 className="is-size-2 pb-6 has-text-weight-medium">Client List</h2>
-      <div className="box columns is-centered is-radiusless">
-        <div className="column is-12 px-0 py-0"> 
+      <div className="container">
+        <h2 className="is-size-2 pb-6 has-text-weight-medium">Client List</h2>
+        <div className="box columns is-centered">
+          <div className="column is-12 px-0 py-0">
             <table className="table is-striped is-fullwidth">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Client Name</th>
-                    <th>State</th>
-                    <th>Number of Inventories</th>
-                    <th>Number of Contacts</th>
-                    <th></th>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Client Name</th>
+                  <th>State</th>
+                  <th>Number of Inventories</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((row, i) =>
+                  <tr className="row-click" onClick={() => showModal(i)} key={(row.abc_client_id ? row.abc_client_id.toString() : "")}>
+                    <td>{(row.abc_client_id ? row.abc_client_id.toString() : "")}</td>
+                    <td>{(row.ClientName ? row.ClientName : "")}</td>
+                    <td>{(row.state ? row.state : "")}</td>
+                    <td>{(row.numberOfInventories ? row.numberOfInventories.toString() : "")}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {clientData.map((row, i) =>
-                    <tr id={(row.abc_client_id ? row.abc_client_id.toString() : "")}>
-                      <td>{(row.abc_client_id ? row.abc_client_id.toString() : "")}</td>
-                      <td>{(row.ClientName ? row.ClientName : "")}</td>
-                      <td>{(row.AddressState ? row.AddressState : "")}</td>
-                      <td>{(row.InventoryCount ? row.InventoryCount.toString() : "")}</td>
-                      <td>{(row.ContactCount ? row.ContactCount.toString() : "")}</td>
-                      <td><button className="button is-dark" onClick={() => showModal(i)}>View Client Details</button></td>
-                    </tr> 
-                  )}
-                </tbody>
+                )}
+              </tbody>
             </table>
             <Modal
               closeModal={toggleModal}
               modalState={isModalActive.valueOf()}
             />
+          </div>
         </div>
       </div>
     </>
