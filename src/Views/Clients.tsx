@@ -195,7 +195,7 @@ export default function Clients() {
   return (
     <>
       <div className="container">
-        <h2 className="is-size-2 pb-6 has-text-weight-medium">Client List</h2>
+        <h2 className="is-size-3 pb-5 has-text-weight-medium has-text-black">Client List</h2>
         <div className="box columns is-centered">
           <div className="column is-12 px-0 py-0">
             <table className="table is-striped is-fullwidth">
