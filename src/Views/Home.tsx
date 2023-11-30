@@ -137,26 +137,21 @@ export default function Home() {
     const result = inventoryData.map(inventory => {
       let currentCapacity = 0;
 
-      if (resourceData.length === 1) {
-        return {}
-      } else {
-        resourceData.forEach(resource => {
-          if (resource.inventory === inventory.inventory_id) {
-            currentCapacity += resource.current_number_of_resources as number;
-          }
-        });
-
-        let capacityPercentage = currentCapacity / (inventory.max_item_capacity as number) * 100;
-
-        return {
-          id: inventory.inventory_id,
-          name: inventory.abc_client.client_name,
-          inventory_name: inventory.inventory_name,
-          current_capacity: capacityPercentage,
-          max_item_capacity: inventory.max_item_capacity,
+      resourceData.forEach(resource => {
+        if (resource.inventory === inventory.inventory_id) {
+          currentCapacity += resource.current_number_of_resources as number;
         }
-      }
+      });
 
+      let capacityPercentage = currentCapacity / (inventory.max_item_capacity as number) * 100;
+
+      return {
+        id: inventory.inventory_id,
+        name: inventory.abc_client.client_name,
+        inventory_name: inventory.inventory_name,
+        current_capacity: capacityPercentage,
+        max_item_capacity: inventory.max_item_capacity,
+      }
     });
 
     setData(result);
@@ -175,7 +170,7 @@ export default function Home() {
                   <th>Id</th>
                   <th>Client</th>
                   <th>Inventory</th>
-                  <th>Current capacity</th>
+                  <th>Current capacity %</th>
                   <th>Max capacity</th>
                 </tr>
               </thead>
