@@ -169,7 +169,7 @@ export default function Home() {
   return (
     <>
       <div className="container">
-        <h2 className="is-size-3 pb-6 has-text-weight-medium">Inventories under 40% of capacity</h2>
+        <h2 className="is-size-3 pb-5 has-text-weight-medium">Inventories Under 40% of Capacity</h2>
         <div className="box columns is-centered">
           <div className="column is-12 px-0 py-0">
             <table className="table is-striped is-fullwidth">
