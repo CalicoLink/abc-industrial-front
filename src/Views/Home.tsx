@@ -119,8 +119,8 @@ export default function Home() {
               }
               {modalClientData.current_capacity &&
                 <>
-                  <label className="has-text-weight-medium">Current Capacity (%): </label>
-                  <p className="mb-3">{(modalClientData.current_capacity ? modalClientData.current_capacity.toString() : "")}</p>
+                  <label className="has-text-weight-medium">Current Capacity: </label>
+                  <p className="mb-3">{(modalClientData.current_capacity ? modalClientData.current_capacity.toString() + "%": "")}</p>
                 </>
               }
               {modalClientData.max_item_capacity &&
@@ -178,7 +178,7 @@ export default function Home() {
                   <th>Id</th>
                   <th>Client</th>
                   <th>Inventory</th>
-                  <th>Current capacity %</th>
+                  <th>Current Capacity</th>
                   <th>Max capacity</th>
                 </tr>
               </thead>
@@ -193,7 +193,7 @@ export default function Home() {
                     <td>{(row.id)}</td>
                     <td>{(row.name)}</td>
                     <td>{(row.inventory_name)}</td>
-                    <td>{(row.current_capacity)}</td>
+                    <td>{(row.current_capacity)}%</td>
                     <td>{(row.max_item_capacity)}</td>
                   </tr>
                 )}
