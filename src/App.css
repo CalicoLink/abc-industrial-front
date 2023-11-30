@@ -17,9 +17,14 @@
 
 .navbar-item {
   color: #000000;
+  font-weight: 600;
   background-color: white;
 }
 
 .navbar-item:active {
   opacity: 0.5;
+}
+
+.page-active {
+  font-weight: 800;
 }
