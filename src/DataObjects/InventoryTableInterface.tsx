@@ -3,7 +3,9 @@ import axios from "axios";
 export interface InventoryTableRow {
     inventory_id: Number,
     inventory_name: String,
-    abc_client: Number,
+    abc_client: {
+        abc_client_id: Number
+    },
     storage_type: String,
     max_item_capacity: Number,
     address: String,
@@ -13,7 +15,9 @@ export interface InventoryTableRow {
 export interface InventoryTableJsonObject {
     inventory_id: Number,
     inventory_name: String,
-    abc_client: Number,
+    abc_client: {
+        abc_client_id: Number
+    },
     storage_type: String,
     max_item_capacity: Number,
     address: String,
