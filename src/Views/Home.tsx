@@ -178,8 +178,8 @@ export default function Home() {
                   <th>Id</th>
                   <th>Client</th>
                   <th>Inventory</th>
-                  <th>Current capacity %</th>
-                  <th>Max capacity</th>
+                  <th>Current Capacity %</th>
+                  <th>Max Capacity</th>
                 </tr>
               </thead>
               <tbody>
