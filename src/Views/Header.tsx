@@ -17,8 +17,10 @@ function onClickHandler() {
 }
 
 function Header() {
+    const path = window.location.pathname.split("/")[1]
+
     return (
-        <nav className="navbar test-app-header" role="navigation" aria-label="main navigation">
+        <nav className="navbar test-app-header is-white" role="navigation" aria-label="main navigation">
             <div className="container">
                 <div className="navbar-brand">
                     <a href="/" className="navbar-item">
@@ -32,8 +34,8 @@ function Header() {
                 </div>
                 <div id="navbarBasicExample" className="navbar-menu">
                     <div className="navbar-end">
-                        <a className="navbar-item" href="/">Home</a>
-                        <a className="navbar-item" href="/clients">Clients</a>
+                        <a className={path === '' ? 'navbar-item page-active' : 'navbar-item'} href="/">Home</a>
+                        <a className={path === 'clients' ? 'navbar-item page-active' : 'navbar-item'} href="/clients">Clients</a>
                     </div>
                 </div>
             </div>
