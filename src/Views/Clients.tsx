@@ -122,7 +122,7 @@ export default function Clients() {
 
     return (
       <div className="modal is-active">
-        <div className="modal-background"></div>
+        <div className="modal-background" onClick={closeModal}></div>
         <div className="modal-card">
           <div className="modal-card-head is-radiusless">
             <p className="modal-card-title">Client Information</p>
@@ -181,9 +181,8 @@ export default function Clients() {
     }
 
     const result = clientData.map(client => {
-      const { ClientName, abc_client_id } = client;
-      const address = addressData.find(address => address.address_id === client.company_address);
-      const state = address ? address.state : 'Unknown';
+      const { ClientName, abc_client_id, company_address } = client;
+      const { state } = company_address
       const numberOfInventories = countInventories(abc_client_id);
 
       return {
@@ -200,7 +199,7 @@ export default function Clients() {
   return (
     <>
       <div className="container">
-        <h2 className="is-size-2 pb-6 has-text-weight-medium">Client List</h2>
+        <h2 className="is-size-3 pb-5 has-text-weight-medium has-text-black">Client List</h2>
         <div className="box columns is-centered">
           <div className="column is-12 px-0 py-0">
             <table className="table is-striped is-fullwidth">
@@ -219,7 +218,7 @@ export default function Clients() {
                     <td>{(row.abc_client_id ? row.abc_client_id.toString() : "")}</td>
                     <td>{(row.ClientName ? row.ClientName : "")}</td>
                     <td>{(row.state ? row.state : "")}</td>
-                    <td>{(row.numberOfInventories ? row.numberOfInventories.toString() : "")}</td>
+                    <td>{(row.numberOfInventories ? row.numberOfInventories.toString() : 0)}</td>
                   </tr>
                 )}
               </tbody>
