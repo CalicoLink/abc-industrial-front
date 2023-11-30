@@ -15,7 +15,12 @@ export default function Clients() {
   const [clientData, setClientData] = useState<ClientTableRow[]>([INIT_CLIENT_DATA]);
   const [addressData, setAddressData] = useState<AddressTableRow[]>([INIT_ADDRESS_DATA]);
   const [inventoryData, setInventoryData] = useState<InventoryTableRow[]>([INIT_INVENTORY_DATA]);
-  const [modalClientData, setmodalClientData] = useState<ClientTableRow>(INIT_CLIENT_DATA);
+  const [modalClientData, setmodalClientData] = useState({
+    abc_client_id: -1,
+    ClientName: '',
+    state: '',
+    numberOfInventories: 0,
+  });
   const [isModalActive, setIsModalActive] = useState<Boolean>(false);
 
 
@@ -109,7 +114,7 @@ export default function Clients() {
   }
 
   function showModal(key: number) {
-    let clientRow: ClientTableRow = clientData.at(key);
+    let clientRow = data.find(el => el.abc_client_id === key);
     setmodalClientData(clientRow);
     toggleModal();
   }
@@ -140,22 +145,16 @@ export default function Clients() {
               }
             </div>
             <div className="column">
-              {modalClientData.AddressState &&
+              {modalClientData.state &&
                 <>
                   <label className="has-text-weight-medium">State: </label>
-                  <p className="mb-3">{(modalClientData.AddressState ? modalClientData.AddressState : "")}</p>
+                  <p className="mb-3">{(modalClientData.state ? modalClientData.state : "")}</p>
                 </>
               }
-              {modalClientData.InventoryCount &&
+              {modalClientData.numberOfInventories &&
                 <>
                   <label className="has-text-weight-medium">Number of Inventories: </label>
-                  <p className="mb-3">{(modalClientData.InventoryCount ? modalClientData.InventoryCount.toString() : "")}</p>
-                </>
-              }
-              {modalClientData.ContactCount &&
-                <>
-                  <label className="has-text-weight-medium">Number of Contacts: </label>
-                  <p>{(modalClientData.ContactCount ? modalClientData.ContactCount.toString() : "")}</p>
+                  <p className="mb-3">{(modalClientData.numberOfInventories ? modalClientData.numberOfInventories.toString() : "")}</p>
                 </>
               }
             </div>
@@ -210,7 +209,7 @@ export default function Clients() {
               </thead>
               <tbody>
                 {data.map((row, i) =>
-                  <tr className="row-click" onClick={() => showModal(i)} key={(row.abc_client_id ? row.abc_client_id.toString() : "")}>
+                  <tr className="row-click" onClick={() => showModal(row.abc_client_id)} key={(row.abc_client_id ? row.abc_client_id.toString() : "")}>
                     <td>{(row.abc_client_id ? row.abc_client_id.toString() : "")}</td>
                     <td>{(row.ClientName ? row.ClientName : "")}</td>
                     <td>{(row.state ? row.state : "")}</td>
