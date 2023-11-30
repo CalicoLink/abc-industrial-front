@@ -170,12 +170,12 @@ export default function Home() {
                   <th>Id</th>
                   <th>Client</th>
                   <th>Inventory</th>
-                  <th>Current capacity %</th>
+                  <th className="is-underlined">Current capacity %</th>
                   <th>Max capacity</th>
                 </tr>
               </thead>
               <tbody>
-                {data.map((row, i) =>
+                {data.filter(el => el.current_capacity <= 40).map((row, i) =>
                   <tr
                     onClick={() => showModal(i)}
                     className="row-click"
