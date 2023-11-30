@@ -10,7 +10,13 @@ export default function Home() {
   const [data, setData] = useState([])
   const [inventoryData, setInventoryData] = useState<InventoryTableRow[]>([INIT_INVENTORY_DATA]);
   const [resourceData, setResourceData] = useState<ResourceTableRow[]>([INIT_RESOURCE_DATA]);
-  const [modalClientData, setmodalClientData] = useState<InventoryTableRow>(INIT_INVENTORY_DATA);
+  const [modalClientData, setmodalClientData] = useState({
+    id: 0,
+    name: "",
+    inventory_name: "",
+    current_capacity: 0,
+    max_item_capacity: 0,
+  });
   const [isModalActive, setIsModalActive] = useState<Boolean>(false);
 
   //A function that supports the creation of the client table.
@@ -73,7 +79,9 @@ export default function Home() {
   }
 
   function showModal(key: number) {
-    let clientRow: InventoryTableRow = inventoryData.at(key);
+    console.log(key)
+    let clientRow = data.find(el => el.id === key);
+    console.log(clientRow)
     setmodalClientData(clientRow);
     toggleModal();
   }
@@ -88,37 +96,37 @@ export default function Home() {
         <div className="modal-background" onClick={closeModal}></div>
         <div className="modal-card">
           <div className="modal-card-head is-radiusless">
-            <p className="modal-card-title">Client Information</p>
+            <p className="modal-card-title">Inventory Information</p>
             <button className="delete is-pulled-right" aria-label="close" onClick={closeModal}></button>
           </div>
           <section className="modal-card-body columns">
             <div className="column">
               <label className="has-text-weight-medium">Number: </label>
-              <p className="mb-3">{(modalClientData.inventory_id ? modalClientData.inventory_id.toString() : "")}</p>
-              {modalClientData.inventory_name &&
+              <p className="mb-3">{(modalClientData.id ? modalClientData.id.toString() : "")}</p>
+              {modalClientData.id &&
                 <>
                   <label className="has-text-weight-medium">Client Name: </label>
-                  <p>{(modalClientData.inventory_name ? modalClientData.inventory_name : "")}</p>
+                  <p>{(modalClientData.name ? modalClientData.name : "")}</p>
                 </>
               }
             </div>
             <div className="column">
-              {modalClientData.storage_type &&
+              {modalClientData.inventory_name &&
                 <>
-                  <label className="has-text-weight-medium">State: </label>
-                  <p className="mb-3">{(modalClientData.storage_type ? modalClientData.storage_type : "")}</p>
+                  <label className="has-text-weight-medium">Inventory name: </label>
+                  <p className="mb-3">{(modalClientData.inventory_name ? modalClientData.inventory_name : "")}</p>
+                </>
+              }
+              {modalClientData.current_capacity &&
+                <>
+                  <label className="has-text-weight-medium">Current capacity: </label>
+                  <p className="mb-3">{(modalClientData.current_capacity ? modalClientData.current_capacity.toString() : "")}</p>
                 </>
               }
               {modalClientData.max_item_capacity &&
                 <>
-                  <label className="has-text-weight-medium">Number of Inventories: </label>
-                  <p className="mb-3">{(modalClientData.max_item_capacity ? modalClientData.max_item_capacity.toString() : "")}</p>
-                </>
-              }
-              {modalClientData.address &&
-                <>
-                  <label className="has-text-weight-medium">Number of Contacts: </label>
-                  <p>{(modalClientData.address ? modalClientData.address.toString() : "")}</p>
+                  <label className="has-text-weight-medium">Max item capacity </label>
+                  <p>{(modalClientData.max_item_capacity ? modalClientData.max_item_capacity.toString() : "")}</p>
                 </>
               }
             </div>
@@ -170,22 +178,23 @@ export default function Home() {
                   <th>Id</th>
                   <th>Client</th>
                   <th>Inventory</th>
-                  <th className="is-underlined">Current capacity %</th>
+                  <th>Current capacity %</th>
                   <th>Max capacity</th>
                 </tr>
               </thead>
               <tbody>
-                {data.filter(el => el.current_capacity <= 40).map((row, i) =>
+                {data.filter(el => el.current_capacity <= 40).map((row) =>
                   <tr
-                    onClick={() => showModal(i)}
+                    onClick={() => showModal(row.id)}
                     className="row-click"
-                    key={(row.id ? row.id.toString() : "")}
+                    key={(row.id)}
+                    id={(row.id)}
                   >
-                    <td>{(row.id ? row.id.toString() : "")}</td>
-                    <td>{(row.name ? row.name : "")}</td>
-                    <td>{(row.inventory_name ? row.inventory_name : "")}</td>
-                    <td>{(row.current_capacity ? row.current_capacity.toString() : "")}</td>
-                    <td>{(row.max_item_capacity ? row.max_item_capacity.toString() : "")}</td>
+                    <td>{(row.id)}</td>
+                    <td>{(row.name)}</td>
+                    <td>{(row.inventory_name)}</td>
+                    <td>{(row.current_capacity)}</td>
+                    <td>{(row.max_item_capacity)}</td>
                   </tr>
                 )}
               </tbody>

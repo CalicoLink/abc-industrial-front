@@ -22,7 +22,7 @@ function Header() {
             <div className="container">
                 <div className="navbar-brand">
                     <a href="/" className="navbar-item">
-                        <h1 className="logo">ABC Industrial</h1>
+                        <h1 className="logo">ABC Industrial Management</h1>
                     </a>
                     <button className="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample" onClick={onClickHandler}>
                         <span aria-hidden="true"></span>
