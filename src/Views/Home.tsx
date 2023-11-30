@@ -1,40 +1,65 @@
 import { useEffect, useState } from "react";
 import "../App.css";
-import { ClientTableRow, ClientTableJsonObject, getClientTable } from "../DataObjects/ClientTableInterface";
-import { INIT_CLIENT_DATA } from "../DataConstants/ClientTableConstants";
-
-
-
+import { INIT_INVENTORY_DATA } from "../DataConstants/InventoryTableConstants";
+import { InventoryTableJsonObject, InventoryTableRow, getInventoryTable } from "../DataObjects/InventoryTableInterface";
+import { ResourceTableJsonObject, ResourceTableRow, getResourceTable } from "../DataObjects/ResourceTableInterface";
+import { INIT_RESOURCE_DATA } from "../DataConstants/ResourceTableConstants";
 
 export default function Home() {
 
-  const [tableData, setTableData] = useState<ClientTableRow[]>([INIT_CLIENT_DATA]);
-  const [modalClientData, setmodalClientData] = useState<ClientTableRow>(INIT_CLIENT_DATA);
+  const [data, setData] = useState([])
+  const [inventoryData, setInventoryData] = useState<InventoryTableRow[]>([INIT_INVENTORY_DATA]);
+  const [resourceData, setResourceData] = useState<ResourceTableRow[]>([INIT_RESOURCE_DATA]);
+  const [modalClientData, setmodalClientData] = useState<InventoryTableRow>(INIT_INVENTORY_DATA);
   const [isModalActive, setIsModalActive] = useState<Boolean>(false);
-
 
   //A function that supports the creation of the client table.
   function setClientTable() {
     try {
-      getClientTable().then(
+      getInventoryTable().then(
         function (response: any) {
-          let clientTableArray: ClientTableRow[] = [];
+          let resourceTableArray: InventoryTableRow[] = [];
 
           //Define the output of my objects to the array.
-          response.data.forEach((element: ClientTableJsonObject) => {
-            clientTableArray.push({
-              abc_client_id: (element.abc_client_id ? element.abc_client_id : null),
-              ClientName: (element.client_name ? element.client_name : ""),
-              company_address: (element.company_address ? element.company_address : null),
-              AddressState: (element.state ? element.state : ""),
-              InventoryCount: (element.num_of_inventories ? element.num_of_inventories : null),
-              ContactCount: (element.num_of_contacts ? element.num_of_contacts : null)
+          response.data.forEach((element: InventoryTableJsonObject) => {
+            resourceTableArray.push({
+              inventory_id: (element.inventory_id ? element.inventory_id : null),
+              inventory_name: (element.inventory_name ? element.inventory_name : ""),
+              abc_client: (element.abc_client ? element.abc_client : null),
+              storage_type: (element.storage_type ? element.storage_type : ""),
+              max_item_capacity: (element.max_item_capacity ? element.max_item_capacity : null),
+              address: (element.address ? element.address : null)
             });
           });
 
+          //Overwrite the table data.
+          setInventoryData(resourceTableArray);
+        },
+        (error) => {
+          console.log(error)
+        }
+      );
+    } catch { }
+
+    try {
+      getResourceTable().then(
+        function (response: any) {
+          let resourceTableArray: ResourceTableRow[] = [];
+
+          //Define the output of my objects to the array.
+          response.data.forEach((element: ResourceTableJsonObject) => {
+            resourceTableArray.push({
+              abc_resource_id: (element.abc_resource_id ? element.abc_resource_id : null),
+              inventory: (element.inventory ? element.inventory : -1),
+              resource_type: (element.resource_type ? element.resource_type : null),
+              resource_name: (element.resource_name ? element.resource_name : ""),
+              max_number_of_resources: (element.max_number_of_resources ? element.max_number_of_resources : null),
+              current_number_of_resources: (element.current_number_of_resources ? element.current_number_of_resources : null)
+            });
+          });
 
           //Overwrite the table data.
-          setTableData(clientTableArray);
+          setResourceData(resourceTableArray);
         },
         (error) => {
           console.log(error)
@@ -48,11 +73,10 @@ export default function Home() {
   }
 
   function showModal(key: number) {
-    let clientRow: ClientTableRow = tableData.at(key);
+    let clientRow: InventoryTableRow = inventoryData.at(key);
     setmodalClientData(clientRow);
     toggleModal();
   }
-
 
   const Modal = ({ closeModal, modalState }: { closeModal: any, modalState: boolean }) => {
     if (!modalState) {
@@ -70,31 +94,31 @@ export default function Home() {
           <section className="modal-card-body columns">
             <div className="column">
               <label className="has-text-weight-medium">Number: </label>
-              <p className="mb-3">{(modalClientData.abc_client_id ? modalClientData.abc_client_id.toString() : "")}</p>
-              {modalClientData.ClientName &&
+              <p className="mb-3">{(modalClientData.inventory_id ? modalClientData.inventory_id.toString() : "")}</p>
+              {modalClientData.inventory_name &&
                 <>
                   <label className="has-text-weight-medium">Client Name: </label>
-                  <p>{(modalClientData.ClientName ? modalClientData.ClientName : "")}</p>
+                  <p>{(modalClientData.inventory_name ? modalClientData.inventory_name : "")}</p>
                 </>
               }
             </div>
             <div className="column">
-              {modalClientData.AddressState &&
+              {modalClientData.storage_type &&
                 <>
                   <label className="has-text-weight-medium">State: </label>
-                  <p className="mb-3">{(modalClientData.AddressState ? modalClientData.AddressState : "")}</p>
+                  <p className="mb-3">{(modalClientData.storage_type ? modalClientData.storage_type : "")}</p>
                 </>
               }
-              {modalClientData.InventoryCount &&
+              {modalClientData.max_item_capacity &&
                 <>
                   <label className="has-text-weight-medium">Number of Inventories: </label>
-                  <p className="mb-3">{(modalClientData.InventoryCount ? modalClientData.InventoryCount.toString() : "")}</p>
+                  <p className="mb-3">{(modalClientData.max_item_capacity ? modalClientData.max_item_capacity.toString() : "")}</p>
                 </>
               }
-              {modalClientData.ContactCount &&
+              {modalClientData.address &&
                 <>
                   <label className="has-text-weight-medium">Number of Contacts: </label>
-                  <p>{(modalClientData.ContactCount ? modalClientData.ContactCount.toString() : "")}</p>
+                  <p>{(modalClientData.address ? modalClientData.address.toString() : "")}</p>
                 </>
               }
             </div>
@@ -104,37 +128,69 @@ export default function Home() {
     );
   }
 
-
   //The useEffect is a function that runs whenever the set data changes or when loading the page.
   useEffect(() => {
     setClientTable();
   }, []);
 
+  useEffect(() => {
+    const result = inventoryData.map(inventory => {
+      let currentCapacity = 0;
+
+      if (resourceData.length === 1) {
+        return {}
+      } else {
+        resourceData.forEach(resource => {
+          if (resource.inventory === inventory.inventory_id) {
+            currentCapacity += resource.current_number_of_resources as number;
+          }
+        });
+
+        let capacityPercentage = currentCapacity / (inventory.max_item_capacity as number) * 100;
+
+        return {
+          id: inventory.inventory_id,
+          name: inventory.abc_client.client_name,
+          inventory_name: inventory.inventory_name,
+          current_capacity: capacityPercentage,
+          max_item_capacity: inventory.max_item_capacity,
+        }
+      }
+
+    });
+
+    setData(result);
+
+  }, [inventoryData, resourceData]);
+
   return (
     <>
       <div className="container">
-        <h2 className="is-size-2 pb-6 has-text-weight-medium">Client List</h2>
+        <h2 className="is-size-3 pb-6 has-text-weight-medium">Inventories under 40% of capacity</h2>
         <div className="box columns is-centered">
           <div className="column is-12 px-0 py-0">
             <table className="table is-striped is-fullwidth">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Client Name</th>
-                  <th>State</th>
-                  <th>Number of Inventories</th>
-                  <th>Number of Contacts</th>
-                  <th></th>
+                  <th>Id</th>
+                  <th>Client</th>
+                  <th>Inventory</th>
+                  <th>Current capacity</th>
+                  <th>Max capacity</th>
                 </tr>
               </thead>
               <tbody>
-                {tableData.map((row, i) =>
-                  <tr onClick={() => showModal(i)} className="row-click" key={(row.abc_client_id ? row.abc_client_id.toString() : "")}>
-                    <td>{(row.abc_client_id ? row.abc_client_id.toString() : "")}</td>
-                    <td>{(row.ClientName ? row.ClientName : "")}</td>
-                    <td>{(row.AddressState ? row.AddressState : "")}</td>
-                    <td>{(row.InventoryCount ? row.InventoryCount.toString() : "")}</td>
-                    <td>{(row.ContactCount ? row.ContactCount.toString() : "")}</td>
+                {data.map((row, i) =>
+                  <tr
+                    onClick={() => showModal(i)}
+                    className="row-click"
+                    key={(row.id ? row.id.toString() : "")}
+                  >
+                    <td>{(row.id ? row.id.toString() : "")}</td>
+                    <td>{(row.name ? row.name : "")}</td>
+                    <td>{(row.inventory_name ? row.inventory_name : "")}</td>
+                    <td>{(row.current_capacity ? row.current_capacity.toString() : "")}</td>
+                    <td>{(row.max_item_capacity ? row.max_item_capacity.toString() : "")}</td>
                   </tr>
                 )}
               </tbody>

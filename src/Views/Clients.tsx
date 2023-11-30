@@ -173,7 +173,11 @@ export default function Clients() {
 
   useEffect(() => {
     function countInventories(clientId: Number) {
-      return inventoryData.filter(inventory => inventory.abc_client === clientId).length;
+      return inventoryData.filter(inventory => inventory.abc_client.abc_client_id === clientId).length;
+    }
+
+    if (clientData.length === 1 && inventoryData.length === 1) {
+      return
     }
 
     const result = clientData.map(client => {
