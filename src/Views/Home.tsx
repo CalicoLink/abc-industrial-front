@@ -111,7 +111,7 @@ export default function Home() {
               }
               {modalClientData.max_item_capacity &&
                 <>
-                  <label className="has-text-weight-medium">Number of Inventories: </label>
+                  <label className="has-text-weight-medium">Max Number of Resources: </label>
                   <p className="mb-3">{(modalClientData.max_item_capacity ? modalClientData.max_item_capacity.toString() : "")}</p>
                 </>
               }
@@ -161,7 +161,7 @@ export default function Home() {
   return (
     <>
       <div className="container">
-        <h2 className="is-size-3 pb-6 has-text-weight-medium">Inventories under 40% of capacity</h2>
+        <h2 className="is-size-3 pb-5 has-text-weight-medium">Inventories Under 40% of Capacity</h2>
         <div className="box columns is-centered">
           <div className="column is-12 px-0 py-0">
             <table className="table is-striped is-fullwidth">
@@ -170,8 +170,8 @@ export default function Home() {
                   <th>Id</th>
                   <th>Client</th>
                   <th>Inventory</th>
-                  <th className="is-underlined">Current capacity %</th>
-                  <th>Max capacity</th>
+                  <th className="is-underlined">Current Capacity %</th>
+                  <th>Max Capacity</th>
                 </tr>
               </thead>
               <tbody>
