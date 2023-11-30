@@ -113,19 +113,19 @@ export default function Home() {
             <div className="column">
               {modalClientData.inventory_name &&
                 <>
-                  <label className="has-text-weight-medium">Inventory name: </label>
+                  <label className="has-text-weight-medium">Inventory Name: </label>
                   <p className="mb-3">{(modalClientData.inventory_name ? modalClientData.inventory_name : "")}</p>
                 </>
               }
               {modalClientData.current_capacity &&
                 <>
-                  <label className="has-text-weight-medium">Current capacity: </label>
+                  <label className="has-text-weight-medium">Current Capacity (%): </label>
                   <p className="mb-3">{(modalClientData.current_capacity ? modalClientData.current_capacity.toString() : "")}</p>
                 </>
               }
               {modalClientData.max_item_capacity &&
                 <>
-                  <label className="has-text-weight-medium">Max item capacity </label>
+                  <label className="has-text-weight-medium">Max Item Capacity: </label>
                   <p>{(modalClientData.max_item_capacity ? modalClientData.max_item_capacity.toString() : "")}</p>
                 </>
               }
